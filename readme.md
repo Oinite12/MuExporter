@@ -22,6 +22,9 @@ Subject to change!
 - [ ] Auto-item lists (wikitext tables)
 - [ ] Prepare item registers
 ### Quality of life
-- [ ] Item mass-exporting
 - [ ] Custom UI for export processing
+- [ ] Item mass-exporting
+- [ ] Resolution selection
+- [ ] Vanilla support
+- [ ] Malverk texture pack support
 - [ ] Auto-update pages/infoboxes/etc. with MediaWiki API?
