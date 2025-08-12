@@ -1,0 +1,11 @@
+{
+    "id": "muexporter",
+    "name": "MuExporter",
+    "author": ["Oinite"],
+    "description": "Exports data and prepares it for the Modded Balatro Wiki",
+    "prefix": "muexp",
+    "main_file": "index.lua",
+    "prority": 0,
+    "version": "0.1",
+    "dependencies": ["Steamodded (>=1.0.0~BETA-0711a)"]
+}
