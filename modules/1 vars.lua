@@ -12,7 +12,4 @@ filedirs.mod_imgs = function(mod_name, item_type)
 	return filedirs.main .. "mods/" .. mod_name .. "/Images/" .. item_type
 end
 
----@class (exact) Mu_f.ImageFuncConfig
----@field dir? string
----@field file_name? string
-u = nil
+Mu_f.items = {}

@@ -16,26 +16,6 @@ end
 
 -- ============
 
----@type table<string, love.ImageData|nil>
-MuExporter.data_holders = {}
-
--- Retrieve an image data holder with some width and height.
----@param w integer
----@param h integer
----@return love.ImageData
-function Mu_f.get_data_holder(w, h)
-	-- We do it this way so we're not unnecessarily creating image data objects
-
-	local image_data_holder = MuExporter.data_holders[w .. "*" .. h]
-	if image_data_holder == nil then
-		image_data_holder = love.image.newImageData(w, h, "rgba8")
-		MuExporter.data_holders[w .. "*" .. h] = image_data_holder
-	end
-	return image_data_holder
-end
-
--- ============
-
 ---@type table<string, boolean>
 local illegal_file_name_characters = {
 	["#"]=true, ["<"]=true, [">"]=true, ["["]=true, ["]"] =true, ["|"]=true,
