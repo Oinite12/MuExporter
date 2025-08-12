@@ -17,3 +17,4 @@ local function load_directory(folder_name)
 end
 
 load_directory("modules")
+load_directory("item-specific")
