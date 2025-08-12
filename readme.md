@@ -1,0 +1,27 @@
+***<u>DISCLAIMER! THIS IS A HIGHLY WORK-IN-PROGRESS PROJECT AND IS PRETTY MUCH USELESS IN ITS CURRENT STATE.</u>***
+# MuExporter
+MuExporter is a Balatro mod that exports data from modded content and prepares it to be useable on the [Modded Balatro Wiki](//balatromods.miraheze.org), streamlining the process of adding initial data to the wiki before in-depth documentation begins. It is intended to be easily expanded to atypical item types and cater to each item type's unique quirks that prevent an all-encompassing solution from being developed.
+
+This mod was inspired by pre-existing data extractors such as [CardExporter](//github.com/lshtech/CardExporter) (particularly [Mysthaps's fork](//github.com/Mysthaps/CardExporter)) and [BalatroDumper](//github.com/BakersDozenBagels/BalatroDumper).
+
+## Supported item types
+- Jokers (sans descriptions)
+
+## Planned features
+Subject to change!
+
+### Data exporting
+- [X] Individual sprite exporting 
+- [X] Indivudual sprite exporting with layers
+- [ ] Individual animated sprite exporting
+- [ ] Individual shaded sprite exporting
+- [ ] Individual description exporting
+### Formatting
+- [ ] Balatro localization to wikitext transcriber
+- [ ] Auto-infoboxes
+- [ ] Auto-item lists (wikitext tables)
+- [ ] Prepare item registers
+### Quality of life
+- [ ] Item mass-exporting
+- [ ] Custom UI for export processing
+- [ ] Auto-update pages/infoboxes/etc. with MediaWiki API?
