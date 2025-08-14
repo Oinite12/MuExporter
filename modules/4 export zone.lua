@@ -11,7 +11,7 @@ local export_zone_jtml =
 }}
 
 -- Generates the export zone.\
--- (similar to a run starting)
+-- (similar to a run starting)\
 -- For proper functionality, please use G.FUNCS.start_export_zone.
 ---@return nil
 function Game:generate_export_zone()
