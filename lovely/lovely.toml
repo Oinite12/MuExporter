@@ -1,0 +1,19 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Allow access to main menu, mods, and your collection in export zone
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = 'if G.STAGE == G.STAGES.RUN then'
+position = "before"
+payload = '''
+if G.STAGE == G.STAGES.muexp_EXPORTZONE then
+  main_menu = UIBox_button{ label = {localize('b_main_menu')}, button = "go_to_menu", minw = 5}
+  mods = UIBox_button{ id = "mods_button", label = {localize('b_mods')}, button = "mods_button", minw = 5}
+  your_collection = UIBox_button{ label = {localize('b_collection')}, button = "your_collection", minw = 5, id = 'your_collection'}
+end
+'''
+match_indent = true
