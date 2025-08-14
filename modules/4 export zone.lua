@@ -10,6 +10,10 @@ local export_zone_jtml =
 
 }}
 
+-- Generates the export zone.\
+-- (similar to a run starting)
+-- For proper functionality, please use G.FUNCS.start_export_zone.
+---@return nil
 function Game:generate_export_zone()
 	-- bc tfym ts nil atp???
 	self.CONTROLLER = {locks = {}}
@@ -70,6 +74,9 @@ function Game:generate_export_zone()
 	}
 end
 
+-- Switches the game stage to the export zone.\
+-- To be used as a button function.
+---@return nil
 G.FUNCS.start_export_zone = function()
 	G.E_MANAGER:clear_queue()
 	G.FUNCS.wipe_on()
