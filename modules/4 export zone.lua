@@ -6,7 +6,7 @@ G.STAGE_OBJECTS[G.STAGES.muexp_EXPORTZONE] = {}
 local export_zone_stylesheet = {}
 
 local export_zone_jtml =
-{"root", style={align="cm", padding=0.03, fillColor=G.C.UI.TRANSPARENT_DARK}, {
+{"root", class="root", {
 
 }}
 

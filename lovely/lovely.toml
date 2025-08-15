@@ -17,3 +17,30 @@ if G.STAGE == G.STAGES.muexp_EXPORTZONE then
 end
 '''
 match_indent = true
+
+# Button to export zone
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "local customize = nil"
+position = "after"
+payload = "local muexp_exportzone = nil"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "if G.STAGE == G.STAGES.MAIN_MENU then"
+position = "after"
+payload = "muexp_exportzone = UIBox_button{ label = {localize('b_muexp_exportzone')}, button = 'start_export_zone', minw = 5}"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''      credits
+    }})
+  return t'''
+position = "before"
+payload = "muexp_exportzone,"
+match_indent = true
