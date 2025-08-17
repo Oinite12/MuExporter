@@ -30,7 +30,7 @@ return {
 	[".list-container"] = {
 		fillColour = lighten(G.C.JOKER_GREY, 0.5),
 		roundness = 1,
-		emboss = 0.2,
+		emboss = 0.15,
 	},
 	[".list"] = {
 		fillColour = G.C.GREY,

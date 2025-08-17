@@ -74,49 +74,7 @@ function generate_list_contents_jtml.item_list(args)
 	return returntable
 end
 
--- The function that runs when moving to a new page in the mod list.
----@param args { cycle_config: { current_option: integer } }
----@return nil
-function G.FUNCS.change_list_contents_mod_list(args)
-	if not G.HUD or not args or not args.cycle_config then return end
-	local mod_list = G.HUD:get_UIE_by_ID('mod_list_contents')
-	if not mod_list then return end
-
-	if mod_list.config.object then mod_list.config.object:remove() end
-	local list_contents = generate_list_contents_jtml.mod_list{page = args.cycle_config.current_option}
-	local new_mod_list_jtml =
-	{"root", style={fillColour=G.C.CLEAR}, {
-		{"row", class="list-contents", list_contents}
-	}}
-
-	mod_list.config.object = UIBox{
-		definition = Mu_f.jtml_to_uibox(new_mod_list_jtml, export_zone_stylesheet),
-		config = {offset = {x=0,y=0}, align = 'cm', parent = mod_list}
-	}
-end
-
--- The function that runs when moving to a new page in the item list.
----@param args { cycle_config: { current_option: integer } }
----@return nil
-function G.FUNCS.change_list_contents_item_list(args)
-	if not G.HUD or not args or not args.cycle_config then return end
-	local item_list = G.HUD:get_UIE_by_ID('item_list_contents')
-	if not item_list then return end
-
-	if item_list.config.object then item_list.config.object:remove() end
-	local list_contents = generate_list_contents_jtml.item_list{page = args.cycle_config.current_option}
-	local new_item_list_jtml =
-	{"root", style={fillColour=G.C.CLEAR}, {
-		{"row", class="list-contents", list_contents}
-	}}
-
-	item_list.config.object = UIBox{
-		definition = Mu_f.jtml_to_uibox(new_item_list_jtml, export_zone_stylesheet),
-		config = {offset = {x=0,y=0}, align = 'cm', parent = item_list}
-	}
-end
-
--- Generates a list-containing box.
+-- Generates the JTML syntax for a list-containing box.
 ---@param args { id: string, label: string }
 ---@return table
 local function generate_box(args)
@@ -157,7 +115,7 @@ local function generate_box(args)
 	}}
 end
 
--- A shorthand for an export zone log line.
+-- Generates the JTML syntax for an export zone log line.
 ---@param i integer
 ---@return table
 local function quick_log_line(i)
@@ -175,14 +133,18 @@ local function quick_log_line(i)
 	}}
 end
 
--- Changes the text of the i-th log line.
----@param i integer
----@param text string
----@return nil
-Mu_f.update_log_line = function(i, text)
-	G.export_zone.log_lines[i] = text
-	G.export_zone.log_line_objects[i]:update()
+-- Generates a list of export zone log lines.
+local function log_lines()
+	local returntable = {}
+	for i = 1, MuExporter.log_size do
+		table.insert(returntable, quick_log_line(i))
+	end
+	return returntable
 end
+
+-- ============
+-- MAIN FUNCTION
+-- ============
 
 -- Generates the UIBox definition for the export zone stage.
 ---@return table
@@ -199,11 +161,13 @@ Mu_f.create_UIBox_export_zone = function()
 	local export_zone_jtml =
 	{"root", class="root", {
 		{"row", class="body", {
+			-- Lists on the left side of the screen
 			{"column", class="body-col left-col", {
 				{"row", class="left-row", style={align="bottom-left"}, {ez_mod_list}},
 				{"row", class="left-row", style={align="top-left"}, {ez_item_list}},
 			}},
 			{"column", class="body-col right-col", {
+				-- Card areas
 				{"row", class="right-row cardarea-list", style={align="center-right"}, {
 					{"column", {
 						{"row", {
@@ -214,27 +178,17 @@ Mu_f.create_UIBox_export_zone = function()
 						}}
 					}}
 				}},
+				-- Log screen
 				{"row", class="right-row", {
-					{"column", class="log-container", {
-						quick_log_line(1),
-						quick_log_line(2),
-						quick_log_line(3),
-						quick_log_line(4),
-						quick_log_line(5),
-						quick_log_line(6),
-						quick_log_line(7),
-						quick_log_line(8),
-						quick_log_line(9),
-						quick_log_line(10),
-						quick_log_line(11),
-						quick_log_line(12),
-					}},
+					{"column", class="log-container", log_lines()},
 				}},
+				-- Export button
 				{"row", class="right-row export-button-container", {
 					{"column", class="export-button", {
 						{"text", class="general-text", text=localize('b_muexp_export')}
 					}}
 				}},
+				-- Tip text
 				{"row", class="right-row tip", {
 					{"text", class="tip-text", text=localize('b_muexp_tip')}
 				}}
@@ -243,4 +197,50 @@ Mu_f.create_UIBox_export_zone = function()
 	}}
 
 	return Mu_f.jtml_to_uibox(export_zone_jtml, export_zone_stylesheet)
+end
+
+-- ============
+-- BUTTON CALLBACKS
+-- ============
+
+-- The function that runs when moving to a new page in the mod list.
+---@param args { cycle_config: { current_option: integer } }
+---@return nil
+function G.FUNCS.change_list_contents_mod_list(args)
+	if not G.HUD or not args or not args.cycle_config then return end
+	local mod_list = G.HUD:get_UIE_by_ID('mod_list_contents')
+	if not mod_list then return end
+
+	if mod_list.config.object then mod_list.config.object:remove() end
+	local list_contents = generate_list_contents_jtml.mod_list{page = args.cycle_config.current_option}
+	local new_mod_list_jtml =
+	{"root", style={fillColour=G.C.CLEAR}, {
+		{"row", class="list-contents", list_contents}
+	}}
+
+	mod_list.config.object = UIBox{
+		definition = Mu_f.jtml_to_uibox(new_mod_list_jtml, export_zone_stylesheet),
+		config = {offset = {x=0,y=0}, align = 'cm', parent = mod_list}
+	}
+end
+
+-- The function that runs when moving to a new page in the item list.
+---@param args { cycle_config: { current_option: integer } }
+---@return nil
+function G.FUNCS.change_list_contents_item_list(args)
+	if not G.HUD or not args or not args.cycle_config then return end
+	local item_list = G.HUD:get_UIE_by_ID('item_list_contents')
+	if not item_list then return end
+
+	if item_list.config.object then item_list.config.object:remove() end
+	local list_contents = generate_list_contents_jtml.item_list{page = args.cycle_config.current_option}
+	local new_item_list_jtml =
+	{"root", style={fillColour=G.C.CLEAR}, {
+		{"row", class="list-contents", list_contents}
+	}}
+
+	item_list.config.object = UIBox{
+		definition = Mu_f.jtml_to_uibox(new_item_list_jtml, export_zone_stylesheet),
+		config = {offset = {x=0,y=0}, align = 'cm', parent = item_list}
+	}
 end

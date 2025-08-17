@@ -30,4 +30,4 @@ Subject to change!
 - [ ] Auto-update pages/infoboxes/etc. with MediaWiki API? (Admin exclusive)
 ### Smaller features
 - [ ] Undefined text-bg combination colllection
-- [ ] Logging to in-stage log
+- [X] Logging to in-stage log

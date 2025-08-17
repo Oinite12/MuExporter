@@ -106,24 +106,14 @@ function Game:generate_export_zone()
 	G.FUNCS.change_list_contents_item_list({cycle_config={current_option=1}})
 	self.HUD:recalculate()
 
-	G.export_zone.log_line_objects = {
-		self.HUD:get_UIE_by_ID('log_line_1').config.object,
-		self.HUD:get_UIE_by_ID('log_line_2').config.object,
-		self.HUD:get_UIE_by_ID('log_line_3').config.object,
-		self.HUD:get_UIE_by_ID('log_line_4').config.object,
-		self.HUD:get_UIE_by_ID('log_line_5').config.object,
-		self.HUD:get_UIE_by_ID('log_line_6').config.object,
-		self.HUD:get_UIE_by_ID('log_line_7').config.object,
-		self.HUD:get_UIE_by_ID('log_line_8').config.object,
-		self.HUD:get_UIE_by_ID('log_line_9').config.object,
-		self.HUD:get_UIE_by_ID('log_line_10').config.object,
-		self.HUD:get_UIE_by_ID('log_line_11').config.object,
-		self.HUD:get_UIE_by_ID('log_line_12').config.object,
-	}
+	G.export_zone.log_line_objects = {}
+	for i = 1, MuExporter.log_size do
+		table.insert(G.export_zone.log_line_objects, self.HUD:get_UIE_by_ID('log_line_' .. i).config.object)
+	end
 end
 
 -- Switches the game stage to the export zone.\
--- To be used as a button function.
+-- To be used as a button functions.
 ---@return nil
 G.FUNCS.start_export_zone = function()
 	G.E_MANAGER:clear_queue()

@@ -44,3 +44,12 @@ pattern = '''      credits
 position = "before"
 payload = "muexp_exportzone,"
 match_indent = true
+
+# Remove cardarea size counters in export zone
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "if self.ARGS.invisible_area_types[self.config.type] or"
+position = "after"
+payload = "(G.STAGE == G.STAGES.muexp_EXPORTZONE) or"
+match_indent = true
