@@ -1,5 +1,5 @@
 ---@type table<string, Mu.ImageDataHolder|nil>
-MuExporter.data_holders = {}
+MuExporter.image_data_holders = {}
 
 ---@class Mu.ImageDataHolder
 ---@field w integer
@@ -18,7 +18,7 @@ function MuExporter.ImageDataHolder:init(w,h)
 	self.image_data = love.image.newImageData(w,h,"rgba8")
 
 	if getmetatable(self) == MuExporter.ImageDataHolder then
-		MuExporter.data_holders[self.id] = self
+		MuExporter.image_data_holders[self.id] = self
 	end
 end
 
@@ -76,7 +76,7 @@ end
 function Mu_f.get_image_data_holder(w, h)
 	-- We do it this way so we're not unnecessarily creating image data objects
 
-	local image_data_holder = MuExporter.data_holders[w .. "*" .. h]
+	local image_data_holder = MuExporter.image_data_holders[w .. "*" .. h]
 	if image_data_holder == nil then
 		image_data_holder = MuExporter.ImageDataHolder(w, h)
 	end
