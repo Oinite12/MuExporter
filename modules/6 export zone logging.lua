@@ -37,8 +37,5 @@ end
 -- ============
 
 love.filesystem.createDirectory(MuExporter.filedirs.logs)
--- Not using NFS for convenience
-local log_directory_files = love.filesystem.getDirectoryItems(MuExporter.filedirs.logs)
-local file_id = #log_directory_files
-MuExporter.latest_log_file = MuExporter.filedirs.logs .. "muexp_log_" .. file_id .. ".log"
+MuExporter.latest_log_file = MuExporter.filedirs.logs .. "muexp_log_" .. os.date("%Y/%m/%d-%X") .. ".log"
 MuExporter.log_file_created = false

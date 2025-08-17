@@ -1,4 +1,5 @@
 Mu_f.items.Jokers = {}
+local log = Mu_f.log
 
 -- ============
 
@@ -7,21 +8,21 @@ Mu_f.items.Jokers = {}
 ---@param key string
 ---@return boolean
 function Mu_f.items.Jokers.export_sprite(key)
-	print("[MU] EXTRACTING JOKER " .. key)
+	log("EXTRACTING SPRITE OF JOKER " .. key .. ":")
 
 	if key:sub(1,2) ~= "j_" then
-		print("[MU] " .. key .. " NOT JOKER, skipping... (what are you doing???)")
+		print(key .. " NOT JOKER, skipping... (what are you doing???)")
 		return false
 	end
 
 	local joker = G.P_CENTERS[key]
 	if not joker then
-		print("[MU] " .. key .. " NOT FOUND, skipping...")
+		print(key .. " NOT FOUND, skipping...")
 		return false
 	end
 
 	if not joker.mod then
-		print("[MU] " .. key .. " VANILLA (No support for vanilla content yet), skipping...")
+		print(key .. " IS VANILLA (No support for vanilla content yet), skipping...")
 		return false
 	end
 
@@ -43,6 +44,7 @@ function Mu_f.items.Jokers.export_sprite(key)
 		joker_sprite:overlay_layer(atlas, soul_pos.x, soul_pos.y)
 	end
 	joker_sprite:export_sprite(dir, file_name)
+	log("JOKER " .. key .. " SPRITE EXTRACT SUCCESS ")
 
 	return true
 end
