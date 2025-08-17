@@ -46,3 +46,82 @@ function Mu_f.items.Jokers.export_sprite(key)
 
 	return true
 end
+
+local rarity_indices = {
+	localize('k_common'),
+	localize('k_uncommon'),
+	localize('k_rare'),
+	localize('k_legendary')
+}
+local rarity_format = "{{Rarity|%s%s}}"
+
+function Mu_f.items.Jokers.prepare_values(key)
+	local area = G.export_zone.CenterContainer
+	if area.cards[1] then
+		local thing = area.cards[1]
+		area:remove_card(thing)
+		thing:remove()
+	end
+	SMODS.add_card{
+		key = key,
+		area = area
+	}
+	local joker = area.cards[1]
+	local j_center = joker.config.center
+	local loc_vars = j_center.loc_vars and j_center:loc_vars({}, joker) or {vars = {}}
+	loc_vars.vars = loc_vars.vars or {}
+	local locked_loc_vars = j_center.locked_loc_vars and j_center:locked_loc_vars({}, joker) or {vars = {}}
+	locked_loc_vars.vars = locked_loc_vars.vars or {}
+	local joker_localization = G.localization.descriptions.Joker[key]
+
+	local unparsed_effect = joker_localization.text and (
+		type(joker_localization.text[1]) == "table"
+		and joker_localization.text
+		or {joker_localization.text}
+	) or {}
+	local unparsed_unlock = joker_localization.unlock and (
+		type(joker_localization.unlock[1]) == "table"
+		and joker_localization.unlock
+		or {joker_localization.unlock}
+	) or {}
+
+	local joker_info = {}
+	joker_info.name = joker_localization.name
+	joker_info.internalid = key
+	joker_info.mod = j_center.mod.name
+	joker_info.image = Mu_f.filename_strip(joker_info.name) .. (" (%s).png"):format(joker_info.mod)
+	joker_info.buyprice = j_center.cost
+	joker_info.copyable = j_center.blueprint_compat and "Yes" or "No"
+	joker_info.perishable = j_center.perishable_compat and "Yes" or "No"
+	joker_info.eternal = j_center.eternal_compat and "Yes" or "No"
+
+	-- parse rarity
+	local j_rarity = j_center.rarity
+	if type(j_rarity) == "number" then -- Vanilla rarities
+		joker_info.rarity = rarity_format:format(rarity_indices[j_rarity], "")
+	else
+		joker_info.rarity = rarity_format:format(localize('k_' .. j_rarity), "|" .. j_rarity.mod.name)
+	end
+
+	-- parse effect
+	for i,value in ipairs(loc_vars.vars) do
+		for _,box in ipairs(unparsed_effect) do
+			for row,text in ipairs(box) do
+				box[row] = text:gsub("#" .. i .. "#", value)
+			end
+		end
+	end
+	joker_info.parsed_effect = Mu_f.transcribe_description(unparsed_effect)
+
+	-- parse unlock
+	for i,value in ipairs(locked_loc_vars.vars) do
+		for _,box in ipairs(unparsed_unlock) do
+			for row,text in ipairs(box) do
+				box[row] = text:gsub("#" .. i .. "#", value)
+			end
+		end
+	end
+	joker_info.parsed_unlock = Mu_f.transcribe_description(unparsed_unlock)
+
+	print(joker_info)
+end
