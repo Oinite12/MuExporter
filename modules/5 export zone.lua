@@ -16,31 +16,39 @@ function Game:generate_export_zone()
 	G.STAGE = G.STAGES.muexp_EXPORTZONE
     set_screen_positions()
 
-	G.exportzone = {}
+	G.export_zone = {}
 
-	G.exportzone.item_list = {}
-	G.exportzone.item_is_selected = {}
-	G.exportzone.item_list_page = 1
+	G.export_zone.item_list = {}
+	G.export_zone.item_is_selected = {}
 	for item_name in pairs(Mu_f.items) do
-		table.insert(G.exportzone.item_list, item_name)
-		G.exportzone.item_is_selected[item_name] = false
+		table.insert(G.export_zone.item_list, item_name)
+		G.export_zone.item_is_selected[item_name] = false
 	end
-	table.sort(G.exportzone.item_list)
+	table.sort(G.export_zone.item_list)
 
-	G.exportzone.mod_list = {}
-	G.exportzone.mod_is_selected = {}
-	G.exportzone.mod_list_page = 1
+	G.export_zone.mod_list = {}
+	G.export_zone.mod_is_selected = {}
 	local mod_blacklist = {
 		DebugPlus = true,
 		muexporter = true
 	}
 	for _,mod in pairs(SMODS.mod_list) do
 		if not mod.disabled and not mod_blacklist[mod.id] then
-			table.insert(G.exportzone.mod_list, {mod.id, mod.name})
-			G.exportzone.mod_is_selected[mod.id] = false
+			table.insert(G.export_zone.mod_list, {mod.id, mod.name})
+			G.export_zone.mod_is_selected[mod.id] = false
 		end
 	end
-	table.sort(G.exportzone.mod_list, function(a,b) return a[1] < b[1] end)
+	table.sort(G.export_zone.mod_list, function(a,b) return a[1] < b[1] end)
+
+	G.export_zone.CenterContainer = CardArea(
+		0, 0,
+		G.CARD_W*1.1,
+		1.05*G.CARD_H,
+		{
+			type = 'joker',
+			highlight_limit = 0
+		}
+	)
 
 	G.SPLASH_BACK = Sprite(-30, -6, G.ROOM.T.w+60, G.ROOM.T.h+12, G.ASSET_ATLAS["ui_1"], {x = 2, y = 0})
 	G.SPLASH_BACK:set_alignment({
@@ -83,6 +91,8 @@ function Game:generate_export_zone()
 		end)
 	}))
 
+	G.export_zone.log_lines = {"","","","","","","","","","","","","","","","",}
+
 	self.HUD = UIBox {
 		definition = Mu_f.create_UIBox_export_zone(),
 		config = {
@@ -90,6 +100,25 @@ function Game:generate_export_zone()
 			offset = {x=-0.7, y=0},
 			major = G.ROOM_ATTACH
 		}
+	}
+
+	G.FUNCS.change_list_contents_mod_list({cycle_config={current_option=1}})
+	G.FUNCS.change_list_contents_item_list({cycle_config={current_option=1}})
+	self.HUD:recalculate()
+
+	G.export_zone.log_line_objects = {
+		self.HUD:get_UIE_by_ID('log_line_1').config.object,
+		self.HUD:get_UIE_by_ID('log_line_2').config.object,
+		self.HUD:get_UIE_by_ID('log_line_3').config.object,
+		self.HUD:get_UIE_by_ID('log_line_4').config.object,
+		self.HUD:get_UIE_by_ID('log_line_5').config.object,
+		self.HUD:get_UIE_by_ID('log_line_6').config.object,
+		self.HUD:get_UIE_by_ID('log_line_7').config.object,
+		self.HUD:get_UIE_by_ID('log_line_8').config.object,
+		self.HUD:get_UIE_by_ID('log_line_9').config.object,
+		self.HUD:get_UIE_by_ID('log_line_10').config.object,
+		self.HUD:get_UIE_by_ID('log_line_11').config.object,
+		self.HUD:get_UIE_by_ID('log_line_12').config.object,
 	}
 end
 
@@ -120,8 +149,9 @@ G.FUNCS.start_export_zone = function()
 	G.FUNCS.wipe_off()
 end
 
---[[
-
-G.FUNCS.start_export_zone()
-
-]]
+local cardclick_hook = Card.click
+function Card:click()
+	if G.STAGE ~= G.STAGES.muexp_EXPORTZONE then
+		cardclick_hook(self)
+	end
+end
