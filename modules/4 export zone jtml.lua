@@ -1,6 +1,9 @@
 local export_zone_stylesheet = assert(SMODS.load_file("modules/extra/export zone jtmlss.lua"))()
 local page_size_limit = 6
 
+-- Generates the JTML syntax for a list item.
+---@param args { label?: string, callback?: string, ref_table?: table, ref_value?: string }
+---@return table
 local function generate_list_item_jtml(args)
 	args = args or {}
 	args.label = args.label or "Test"
@@ -23,6 +26,9 @@ end
 
 local generate_list_contents_jtml = {}
 
+-- Generates the JTML syntax for the mod list.
+---@param args { page?: integer }
+---@return table
 function generate_list_contents_jtml.mod_list(args)
 	args = args or {}
 	args.page = args.page or 1
@@ -44,6 +50,9 @@ function generate_list_contents_jtml.mod_list(args)
 	return returntable
 end
 
+-- Generates the JTML syntax for the item list.
+---@param args { page?: integer }
+---@return table
 function generate_list_contents_jtml.item_list(args)
 	args = args or {}
 	args.page = args.page or 1
@@ -65,6 +74,9 @@ function generate_list_contents_jtml.item_list(args)
 	return returntable
 end
 
+-- The function that runs when moving to a new page in the mod list.
+---@param args { cycle_config: { current_option: integer } }
+---@return nil
 function G.FUNCS.change_list_contents_mod_list(args)
 	if not G.HUD or not args or not args.cycle_config then return end
 	local mod_list = G.HUD:get_UIE_by_ID('mod_list_contents')
@@ -83,6 +95,9 @@ function G.FUNCS.change_list_contents_mod_list(args)
 	}
 end
 
+-- The function that runs when moving to a new page in the item list.
+---@param args { cycle_config: { current_option: integer } }
+---@return nil
 function G.FUNCS.change_list_contents_item_list(args)
 	if not G.HUD or not args or not args.cycle_config then return end
 	local item_list = G.HUD:get_UIE_by_ID('item_list_contents')
@@ -101,6 +116,9 @@ function G.FUNCS.change_list_contents_item_list(args)
 	}
 end
 
+-- Generates a list-containing box.
+---@param args { id: string, label: string }
+---@return table
 local function generate_box(args)
 	args = args or {}
 	args.id = args.id or "list"
@@ -139,7 +157,10 @@ local function generate_box(args)
 	}}
 end
 
-local function quick_dynatext(i)
+-- A shorthand for an export zone log line.
+---@param i integer
+---@return table
+local function quick_log_line(i)
 	return
 	{"row", class="log-line-container", {
 		{"object", id = "log_line_" .. i, object=DynaText{
@@ -154,19 +175,25 @@ local function quick_dynatext(i)
 	}}
 end
 
+-- Changes the text of the i-th log line.
+---@param i integer
+---@param text string
+---@return nil
 Mu_f.update_log_line = function(i, text)
 	G.export_zone.log_lines[i] = text
 	G.export_zone.log_line_objects[i]:update()
 end
 
+-- Generates the UIBox definition for the export zone stage.
+---@return table
 Mu_f.create_UIBox_export_zone = function()
 	local ez_mod_list = generate_box{
 		id="mod_list",
-		label=localize('b_muexp_mod_list')
+		label=localize('b_muexp_mod_list') or "Mod list"
 	}
 	local ez_item_list = generate_box{
 		id="item_list",
-		label=localize('b_muexp_item_list')
+		label=localize('b_muexp_item_list') or "Mod list"
 	}
 
 	local export_zone_jtml =
@@ -189,18 +216,18 @@ Mu_f.create_UIBox_export_zone = function()
 				}},
 				{"row", class="right-row", {
 					{"column", class="log-container", {
-						quick_dynatext(1),
-						quick_dynatext(2),
-						quick_dynatext(3),
-						quick_dynatext(4),
-						quick_dynatext(5),
-						quick_dynatext(6),
-						quick_dynatext(7),
-						quick_dynatext(8),
-						quick_dynatext(9),
-						quick_dynatext(10),
-						quick_dynatext(11),
-						quick_dynatext(12),
+						quick_log_line(1),
+						quick_log_line(2),
+						quick_log_line(3),
+						quick_log_line(4),
+						quick_log_line(5),
+						quick_log_line(6),
+						quick_log_line(7),
+						quick_log_line(8),
+						quick_log_line(9),
+						quick_log_line(10),
+						quick_log_line(11),
+						quick_log_line(12),
 					}},
 				}},
 				{"row", class="right-row export-button-container", {

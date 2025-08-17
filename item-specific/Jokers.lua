@@ -47,6 +47,8 @@ function Mu_f.items.Jokers.export_sprite(key)
 	return true
 end
 
+-- ============
+
 local rarity_indices = {
 	localize('k_common'),
 	localize('k_uncommon'),
@@ -55,6 +57,9 @@ local rarity_indices = {
 }
 local rarity_format = "{{Rarity|%s%s}}"
 
+-- Prepares various descriptions and values associated with the Joker.
+---@param key string
+---@return {name: string, internalid: string, mod: string, image: string, buyprice: number, copyable: boolean, perishable: boolean, eternal: boolean, rarity: string, parsed_effect: table, parsed_unlock: table }
 function Mu_f.items.Jokers.prepare_values(key)
 	local area = G.export_zone.CenterContainer
 	if area.cards[1] then
@@ -91,9 +96,9 @@ function Mu_f.items.Jokers.prepare_values(key)
 	joker_info.mod = j_center.mod.name
 	joker_info.image = Mu_f.filename_strip(joker_info.name) .. (" (%s).png"):format(joker_info.mod)
 	joker_info.buyprice = j_center.cost
-	joker_info.copyable = j_center.blueprint_compat and "Yes" or "No"
-	joker_info.perishable = j_center.perishable_compat and "Yes" or "No"
-	joker_info.eternal = j_center.eternal_compat and "Yes" or "No"
+	joker_info.copyable = j_center.blueprint_compat
+	joker_info.perishable = j_center.perishable_compat
+	joker_info.eternal = j_center.eternal_compat
 
 	-- parse rarity
 	local j_rarity = j_center.rarity
@@ -123,5 +128,5 @@ function Mu_f.items.Jokers.prepare_values(key)
 	end
 	joker_info.parsed_unlock = Mu_f.transcribe_description(unparsed_unlock)
 
-	print(joker_info)
+	return joker_info
 end
