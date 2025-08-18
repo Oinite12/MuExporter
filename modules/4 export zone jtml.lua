@@ -184,7 +184,7 @@ Mu_f.create_UIBox_export_zone = function()
 				}},
 				-- Export button
 				{"row", class="right-row export-button-container", {
-					{"column", class="export-button", {
+					{"column", id="mass_export_button", class="export-button", onclick="mass_export", ondraw="mass_export_ondraw", {
 						{"text", class="general-text", text=localize('b_muexp_export')}
 					}}
 				}},

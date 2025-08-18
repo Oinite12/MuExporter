@@ -17,6 +17,7 @@ function Game:generate_export_zone()
     set_screen_positions()
 
 	G.export_zone = {}
+	MuExporter.enable_easter_egg = false
 
 	G.export_zone.item_list = {}
 	G.export_zone.item_is_selected = {}

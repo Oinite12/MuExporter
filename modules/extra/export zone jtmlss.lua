@@ -86,7 +86,6 @@ return {
 	},
 
 	[".export-button"] = {
-		fillColour = G.C.RED,
 		padding = 0.3,
 		emboss = 0.2,
 		roundness = 1,

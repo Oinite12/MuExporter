@@ -18,12 +18,12 @@ Subject to change!
 - [ ] Individual description exporting
 ### Formatting
 - [X] Balatro localization to wikitext transcriber
-- [ ] Auto-infoboxes
-- [ ] Auto-item lists (wikitext tables)
+- [X] Auto-infoboxes
+- [X] Auto-item lists (wikitext tables)
 - [ ] Prepare item registers
 ### Quality of life
 - [X] Custom UI for export processing
-- [ ] Item mass-exporting
+- [X] Item mass-exporting
 - [ ] Resolution selection
 - [ ] Vanilla support
 - [ ] Malverk texture pack support
