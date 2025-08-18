@@ -169,6 +169,23 @@ end
 
 -- ============
 
+-- Gets a list of Centers (so excluding Blinds) in the order seen in the Collection.
+---@param mod_object Mod
+---@param pool_table_name string
+---@return table<integer, string>
+function item_F.get_centers_in_collection_order(mod_object, pool_table_name)
+	local all_items_in_collection_order = G.P_CENTER_POOLS[pool_table_name]
+	local mod_items_in_collection_order = {}
+	for _,item in ipairs(all_items_in_collection_order) do
+		if item.original_mod == mod_object then
+			table.insert(mod_items_in_collection_order, item.key)
+		end
+	end
+	return mod_items_in_collection_order
+end
+
+-- ============
+
 -- Of a given mod, exports the images and data of the items under a specific item type.
 ---@param item_type string
 ---@param item_type_loc_desc_entry string
@@ -178,32 +195,53 @@ function item_F.mass_export(item_type, item_type_loc_desc_entry, mod_id)
 	local mod_object = SMODS.Mods[mod_id]
 	local mod_name = mod_object.name or "unspecified_mod"
 
-	local items_in_collection_order = G.P_CENTER_POOLS[item_type_loc_desc_entry]
+	log(("Exporting %s %s..."):format(mod_name, item_type))
+
+	local all_items_in_collection_order = G.P_CENTER_POOLS[item_type_loc_desc_entry]
 	local mod_items_in_collection_order = {}
-	for _,item in ipairs(items_in_collection_order) do
+	for _,item in ipairs(all_items_in_collection_order) do
 		if item.original_mod == mod_object then
 			table.insert(mod_items_in_collection_order, item.key)
 		end
 	end
 
-	log(("Exporting %s %s..."):format(mod_name, item_type))
+	local export_sprite  = Mu_f.items[item_type].export_sprite
+	local prepare_values = Mu_f.items[item_type].prepare_values
+	local generate_page  = Mu_f.items[item_type].generate_page
+	local generate_list_page = Mu_f.items[item_type].generate_list_page
+	local generate_registry_section = Mu_f.items[item_type].generate_registry_section
+	local get_items_in_collection_order = Mu_f.items[item_type].get_items_in_collection_order
+
+	mod_items_in_collection_order = get_items_in_collection_order(mod_object)
 
 	for _,item_key in ipairs(mod_items_in_collection_order) do
 		simple_ev(function()
-			Mu_f.items[item_type].export_sprite(item_key)
+			export_sprite(item_key)
 			delay(0.1)
 		end)
 	end
-	for _,item_key in ipairs(mod_items_in_collection_order) do
+
+	if generate_page then
+		for _,item_key in ipairs(mod_items_in_collection_order) do
+			simple_ev(function()
+				local item_info = prepare_values(item_key)
+				generate_page(item_info)
+				delay(0.1)
+			end)
+		end
+	end
+
+	if generate_list_page then
 		simple_ev(function()
-			local item_info = Mu_f.items[item_type].prepare_values(item_key)
-			Mu_f.items[item_type].generate_page(item_info)
-			delay(0.1)
+			generate_list_page(mod_name, mod_items_in_collection_order)
 		end)
 	end
-	simple_ev(function()
-		Mu_f.items[item_type].generate_list_page(mod_name, mod_items_in_collection_order)
-	end)
+
+	if generate_registry_section then
+		simple_ev(function()
+			generate_registry_section(mod_name, mod_items_in_collection_order)
+		end)
+	end
 
 	log(("Export of %s %s DONE"):format(mod_name, item_type))
 end

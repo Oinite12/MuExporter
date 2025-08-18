@@ -10,6 +10,15 @@ local item_List = MuExporter.items.Decks
 -- DATA PARSING
 -- ============
 
+-- Gets a list of Decks in the order seen in the Collection.
+---@param mod_object Mod
+---@return table<integer, string>
+function item_F.get_items_in_collection_order(mod_object)
+	return Mu_f.items.Centers.get_centers_in_collection_order(mod_object, "Back")
+end
+
+-- ============
+
 ---@class Mu.DeckInfo
 ---@field name string
 ---@field nakedname string
@@ -58,7 +67,7 @@ Mu_f.infoboxes.Decks = function(args)
     Mu_f.items.Centers.wikitext_unlock(params, args.parsed_unlock)
     Mu_f.items.Centers.wikitext_effect(params, args.parsed_effect)
 
-	return Mu_f.infobox_string("DeckInfobox", params, {
+	return Mu_f.block_template_string("DeckInfobox", params, {
 		"name",
 		"internalid",
 		"mod",

@@ -113,12 +113,12 @@ end
 
 -- ============
 
--- Generates a wikitext infobox template.
+-- Generates a wikitext template in block format.
 ---@param name string
 ---@param params table<string, any>
 ---@param order table<integer, string>
 ---@return string
-function Mu_f.infobox_string(name, params, order)
+function Mu_f.block_template_string(name, params, order)
 	local start_tag = "{{" .. name
 	local end_tag   = "}}"
 

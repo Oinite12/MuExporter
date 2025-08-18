@@ -30,6 +30,15 @@ end
 -- DATA PARSING
 -- ============
 
+-- Gets a list of Jokers in the order seen in the Collection.
+---@param mod_object Mod
+---@return table<integer, string>
+function item_F.get_items_in_collection_order(mod_object)
+	return Mu_f.items.Centers.get_centers_in_collection_order(mod_object, "Joker")
+end
+
+-- ============
+
 ---@class Mu.JokerInfo
 ---@field name string
 ---@field nakedname string
@@ -93,7 +102,7 @@ Mu_f.infoboxes.Jokers = function(args)
     Mu_f.items.Centers.wikitext_unlock(params, args.parsed_unlock)
     Mu_f.items.Centers.wikitext_effect(params, args.parsed_effect)
 
-	return Mu_f.infobox_string("JokerInfobox", params, {
+	return Mu_f.block_template_string("JokerInfobox", params, {
 		"name",
 		"internalid",
 		"mod",

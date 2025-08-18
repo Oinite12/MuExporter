@@ -31,7 +31,9 @@ filedirs.mod_pages = function(mod_name, item_type)
 end
 
 MuExporter.items = {}
+---@type table<string, table<string, function>>
 Mu_f.items = {}
 
 MuExporter.log_size = 12
 Mu_f.infoboxes = {}
+Mu_f.registers = {}
