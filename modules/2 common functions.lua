@@ -162,8 +162,11 @@ MuExporter.undefined_ct_codes = {}
 local function determine_code(text_colour, background_colour, variable)
 	if variable then return "UNKNOWN-COLOUR" end
 	if not text_colour and not background_colour then return end
-	local undefined_ct_code = ("C:%s, X:%s"):format(text_colour or "{}", background_colour or "{}")
-	MuExporter.undefined_ct_codes[undefined_ct_code] = true
+
+	local undefined_ct_code = ("%s---%s"):format(text_colour or "{}", background_colour or "{}")
+	local undefined_ct_row = ("%s, %s"):format(text_colour or "", background_colour or "")
+	MuExporter.undefined_ct_codes[undefined_ct_code] = undefined_ct_row
+
 	return "UNDEFINED-COLOUR"
 end
 
