@@ -5,6 +5,10 @@ function G.FUNCS.mass_export_ondraw(e)
 	e.config.button = 'mass_export'
 end
 
+local easter_egg_1 = false
+local easter_egg_2 = false
+local easter_egg_3 = false
+
 function G.FUNCS.mass_export(e)
 	local selected_mods = {}
 	local selected_items = {}
@@ -28,16 +32,19 @@ function G.FUNCS.mass_export(e)
 			log("(Select a mod and item to begin export!)")
 		else
 			log("Please select a mod and item to begin exporting!")
+			easter_egg_1 = true
 		end
 		return
 	elseif #selected_mods == 0 then
 		log("Please select a mod to begin exporting!")
+		easter_egg_2 = true
 		return
 	elseif #selected_items == 0 then
 		log("Please select an item type to begin exporting!")
+		easter_egg_3 = true
 		return
 	end
-	MuExporter.enable_easter_egg = true
+	MuExporter.enable_easter_egg = easter_egg_1 and easter_egg_2 and easter_egg_3
 
 	log("STARTING EXPORT - Expect freezing!!")
 	for _,mod_id in ipairs(selected_mods) do
