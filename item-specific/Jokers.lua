@@ -284,6 +284,8 @@ end
 -- ============
 
 -- Exports Joker images and data of a given mod.
+---@param mod_id string
+---@return nil
 function Mu_f.items.Jokers.mass_export(mod_id)
 	local mod_object = SMODS.Mods[mod_id]
 	local mod_name = mod_object.name or "unspecified_mod"
