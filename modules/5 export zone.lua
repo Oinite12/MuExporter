@@ -21,9 +21,12 @@ function Game:generate_export_zone()
 
 	G.export_zone.item_list = {}
 	G.export_zone.item_is_selected = {}
+	local item_blacklist = {Centers = true}
 	for item_name in pairs(Mu_f.items) do
-		table.insert(G.export_zone.item_list, item_name)
-		G.export_zone.item_is_selected[item_name] = false
+		if not item_blacklist[item_name] then
+			table.insert(G.export_zone.item_list, item_name)
+			G.export_zone.item_is_selected[item_name] = false
+		end
 	end
 	table.sort(G.export_zone.item_list)
 
