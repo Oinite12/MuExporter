@@ -6,6 +6,7 @@ This mod was inspired by pre-existing data extractors such as [CardExporter](//g
 
 ## Supported item types
 - Jokers
+- Decks
 
 ## Planned features
 Subject to change!
