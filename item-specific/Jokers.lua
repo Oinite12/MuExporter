@@ -38,22 +38,9 @@ local j_info_tbl = {}
 function Mu_f.items.Jokers.prepare_values(key)
 	if MuExporter.items.Jokers[key] then return MuExporter.items.Jokers[key] end
 
-	-- Card needs to be created to access locvars
-	local area = G.export_zone.CenterContainer
-	if area.cards[1] then
-		local thing = area.cards[1]
-		area:remove_card(thing)
-		thing:remove()
-	end
-	SMODS.add_card{
-		key = key,
-		area = area,
-		skip_materialize = true,
-		no_edition = true,
-	}
-
-	local joker = area.cards[1]
+	local joker = Mu_f.set_contained_card(key)
 	local j_center = joker.config.center
+
 	local loc_vars = j_center.loc_vars and j_center:loc_vars({}, joker) or {vars = {}}
 	local locked_loc_vars = j_center.locked_loc_vars and j_center:locked_loc_vars({}, joker) or {vars = {}}
 	local joker_localization = G.localization.descriptions.Joker[key]

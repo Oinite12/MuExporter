@@ -56,6 +56,23 @@ function Mu_f.set_dir_slash(dir_path)
 end
 
 -- ============
+function Mu_f.set_contained_card(key)
+	-- Card needs to be created to access locvars
+	local area = G.export_zone.CenterContainer
+	if area.cards[1] then
+		local thing = area.cards[1]
+		area:remove_card(thing)
+		thing:remove()
+	end
+	return SMODS.add_card {
+		key = key,
+		area = area,
+		skip_materialize = true,
+		no_edition = true,
+	}
+end
+
+-- ============
 
 -- Removes spaces around the input.
 ---@param input string
