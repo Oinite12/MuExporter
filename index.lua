@@ -21,3 +21,8 @@ end
 load_directory("lib")
 load_directory("modules")
 load_directory("item-specific")
+
+-- Needs to be generated as ImageData not provided by vanilla atlases
+Mu_f.simple_ev(function ()
+	G.ASSET_ATLAS.cards_1.image_data = love.image.newImageData("resources/textures/"..G.SETTINGS.GRAPHICS.texture_scaling.."x/8BitDeck.png")
+end)

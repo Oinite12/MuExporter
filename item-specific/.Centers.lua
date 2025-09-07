@@ -157,6 +157,12 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 			end)
 		end
 
+		if self.generate_list_section then
+			Mu_f.simple_ev(function ()
+				self:generate_list_section(mod_name, ordered_mod_item_list)
+			end)
+		end
+
 		if self.register_template then
 			Mu_f.simple_ev(function ()
 				self:generate_registry_section(mod_name, ordered_mod_item_list)

@@ -26,9 +26,10 @@ end
 ---@param atlas_name string
 ---@param pos_x integer
 ---@param pos_y integer
+---@param atlas_table? table
 ---@return nil
-function MuExporter.ImageDataHolder:overlay_layer(atlas_name, pos_x, pos_y)
-	local atlas = SMODS.Atlases[atlas_name]
+function MuExporter.ImageDataHolder:overlay_layer(atlas_name, pos_x, pos_y, atlas_table)
+	local atlas = (atlas_table or SMODS.Atlases)[atlas_name]
 	local granularity = G.SETTINGS.GRAPHICS.texture_scaling
 	local full_px = atlas.px*granularity
 	local full_py = atlas.py*granularity
@@ -90,9 +91,10 @@ end
 ---@param atlas_name string
 ---@param x integer
 ---@param y integer
+---@param atlas_table? table
 ---@return Mu.ImageDataHolder
-function Mu_f.get_atlas_sprite(atlas_name, x, y)
-	local atlas = SMODS.Atlases[atlas_name]
+function Mu_f.get_atlas_sprite(atlas_name, x, y, atlas_table)
+	local atlas = (atlas_table or SMODS.Atlases)[atlas_name]
 	local granularity = G.SETTINGS.GRAPHICS.texture_scaling
 	local full_px = atlas.px*granularity
 	local full_py = atlas.py*granularity

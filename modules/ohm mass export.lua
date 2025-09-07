@@ -63,8 +63,10 @@ function G.FUNCS.mass_export(e)
 	end)
 
 	log("EXPORT COMPLETE - can be found in %AppData%/Balatro/MuExporter/Modded Balatro Wiki")
-	log("P.s. If it's not empty, also please send the 'Undefined Ct codes.txt' file to")
-	log("    the BMW Discord server!")
+	if next(MuExporter.undefined_ct_codes) ~= nil then
+		log("Undefined CT codes detected: Please send the 'Undefined Ct codes.txt' file to")
+		log("    the BMW Discord server or the MuExporter repository.")
+	end
 	Mu_f.simple_ev(function()
 		G.E_MANAGER:clear_queue()
 	end)

@@ -8,6 +8,7 @@ This mod was inspired by pre-existing data extractors such as [CardExporter](//g
 - Jokers
 - Decks
 - Vouchers
+- Enhancements
 
 ## Planned features
 Subject to change!
@@ -17,12 +18,12 @@ Subject to change!
 - [X] Indivudual sprite exporting with layers
 - [ ] Individual animated sprite exporting
 - [ ] Individual shaded sprite exporting
-- [ ] Individual description exporting
+- [X] Individual description exporting
 ### Formatting
 - [X] Balatro localization to wikitext transcriber
 - [X] Auto-infoboxes
 - [X] Auto-item lists (wikitext tables)
-- [ ] Prepare item registers
+- [X] Prepare item registers
 ### Quality of life
 - [X] Custom UI for export processing
 - [X] Item mass-exporting
@@ -31,5 +32,5 @@ Subject to change!
 - [ ] Malverk texture pack support
 - [ ] Auto-update pages/infoboxes/etc. with MediaWiki API? (Admin exclusive)
 ### Smaller features
-- [ ] Undefined text-bg combination colllection
+- [X] Undefined text-bg combination colllection
 - [X] Logging to in-stage log

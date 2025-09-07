@@ -19,7 +19,8 @@ end
 ---@type table<string, boolean>
 local illegal_file_name_characters = {
 	["#"]=true, ["<"]=true, [">"]=true, ["["]=true, ["]"] =true, ["|"]=true,
-	[":"]=true, ["{"]=true, ["}"]=true, ["/"]=true, ["\\"]=true,
+	[":"]=true, ["{"]=true, ["}"]=true, ["/"]=true, ["\\"]=true, ['"']=true,
+	["?"]=true, ["*"]=true
 }
 
 -- Replaces the characters #<>[]|:{}/\\ \
