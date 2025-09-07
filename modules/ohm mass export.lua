@@ -49,7 +49,7 @@ function G.FUNCS.mass_export(e)
 	log("STARTING EXPORT - Expect freezing!!")
 	for _,mod_id in ipairs(selected_mods) do
 		for _,item in ipairs(selected_items) do
-			Mu_f.items[item].mass_export(mod_id)
+			MuExporter.exporters[item]:mass_export(mod_id)
 		end
 	end
 
