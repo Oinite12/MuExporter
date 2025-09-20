@@ -18,6 +18,21 @@ local function load_directory(folder_name)
 	end
 end
 
+-- A shorthand of adding an event to G.E_MANAGER that only defines the properties func.\
+-- Event function will always return true, so "return true" is not required.\
+-- Consequently, do not use this function if the event function needs to return a non-true value,\
+-- or if other parameters such as trigger or blocking require specification.
+---@param func function
+---@return nil
+Mu_f.simple_ev = function(func)
+	G.E_MANAGER:add_event(Event {
+		func = function()
+			func()
+			return true
+		end
+	})
+end
+
 load_directory("lib")
 load_directory("modules")
 load_directory("item-specific")

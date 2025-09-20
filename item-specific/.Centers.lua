@@ -26,7 +26,7 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 
 
 	get_localization_text = function(self, item_key)
-		local item = Mu_f.set_contained_card(item_key)
+		local item = Mu_f.set_contained_center(item_key)
 		local center = item.config.center
 
 		local loc_vars = center.loc_vars and center:loc_vars({}, item) or {vars = {}}
@@ -78,11 +78,11 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 	generate_individual_page = function(self, item_key)
 		local item_data = self:prepare_values(item_key)
 		local infobox_text = self:infobox_template(item_data)
-		local page_format = [[{{modsubpage}}
+		local page_format = [[{{modsubpage|%s}}
 {{auto generated|MuExporter}}
 %s
 ]]
-		local page = page_format:format(infobox_text)
+		local page = page_format:format(self.item_type_name, infobox_text)
 		----
 		local dir = MuExporter.filedirs.mod_pages(item_data.mod, self.item_type_name)
 		local file_name = item_data.nakedname .. ".txt"
@@ -142,7 +142,6 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		for _,item_key in ipairs(ordered_mod_item_list) do
 			Mu_f.simple_ev(function()
 				self:export_sprite(item_key)
-				delay(0.1)
 			end)
 			if self.infobox_template then
 				Mu_f.simple_ev(function()

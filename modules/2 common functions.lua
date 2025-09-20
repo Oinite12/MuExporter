@@ -1,21 +1,3 @@
--- A shorthand of adding an event to G.E_MANAGER that only defines the properties func.\
--- Event function will always return true, so "return true" is not required.\
--- Consequently, do not use this function if the event function needs to return a non-true value,\
--- or if other parameters such as trigger or blocking require specification.
----@param func function
----@return nil
-Mu_f.simple_ev = function(func)
-	G.E_MANAGER:add_event(Event {
-		func = function()
-			func()
-			delay(0.1)
-			return true
-		end
-	})
-end
-
--- ============
-
 ---@type table<string, boolean>
 local illegal_file_name_characters = {
 	["#"]=true, ["<"]=true, [">"]=true, ["["]=true, ["]"] =true, ["|"]=true,
@@ -57,14 +39,17 @@ function Mu_f.set_dir_slash(dir_path)
 end
 
 -- ============
-function Mu_f.set_contained_card(key)
+function Mu_f.set_contained_center(key)
 	-- Card needs to be created to access locvars
 	local area = G.export_zone.CenterContainer
+
+	-- If card already set, just change ability
 	if area.cards[1] then
-		local thing = area.cards[1]
-		area:remove_card(thing)
-		thing:remove()
+		area.cards[1]:set_ability(key)
+		return area.cards[1]
 	end
+
+	-- Otherwise create new card
 	return SMODS.add_card {
 		key = key,
 		area = area,
@@ -164,9 +149,13 @@ local function determine_code(text_colour, background_colour, variable)
 	if variable then return "UNKNOWN-COLOUR" end
 	if not text_colour and not background_colour then return end
 
+	local loc_to_ct_index = ("%s, %s"):format(text_colour or "", background_colour or "")
+	if MuExporter.ct_codes[loc_to_ct_index] then
+		return MuExporter.ct_codes[loc_to_ct_index]
+	end
+
 	local undefined_ct_code = ("%s---%s"):format(text_colour or "{}", background_colour or "{}")
-	local undefined_ct_row = ("%s, %s"):format(text_colour or "", background_colour or "")
-	MuExporter.undefined_ct_codes[undefined_ct_code] = undefined_ct_row
+	MuExporter.undefined_ct_codes[undefined_ct_code] = loc_to_ct_index
 
 	return "UNDEFINED-COLOUR"
 end

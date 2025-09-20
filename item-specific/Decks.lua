@@ -11,11 +11,11 @@ local page_format =
 ]]
 
 local table_row_format =
-[[|-
-| \[\[File:%s|142px\]\]
+[=[|-
+| [[File:%s|142px]]
 | %s
 |
-%s]]
+%s]=]
 
 MuExporter.obj.CenterExporter {
 	key = 'Decks',
