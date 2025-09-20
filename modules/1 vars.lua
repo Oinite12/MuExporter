@@ -16,17 +16,19 @@ end
 
 ---@param mod_name string
 ---@param item_type string
+---@param subdir? string
 ---@return string
-filedirs.mod_imgs = function(mod_name, item_type)
-	item_type = Mu_f.filename_strip(item_type)
+filedirs.mod_imgs = function(mod_name, item_type, subdir)
+	item_type = Mu_f.filename_strip(item_type .. (subdir and ("/" .. subdir) or ""))
 	return filedirs.mod(mod_name) .. "Images/" .. item_type
 end
 
 ---@param mod_name string
 ---@param item_type string
+---@param subdir? string
 ---@return string
-filedirs.mod_pages = function(mod_name, item_type)
-	item_type = Mu_f.filename_strip(item_type)
+filedirs.mod_pages = function(mod_name, item_type, subdir)
+	item_type = Mu_f.filename_strip(item_type .. (subdir and ("/" .. subdir) or ""))
 	return filedirs.mod(mod_name) .. "Pages/" .. item_type
 end
 
