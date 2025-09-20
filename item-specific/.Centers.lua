@@ -21,6 +21,7 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		self.vanilla_item_type_name = self.vanilla_item_type_name or self.key
 		self.ordered_item_list = G.P_CENTER_POOLS[self.vanilla_item_type_name]
 		self.loc_desc = self.loc_desc or G.localization.descriptions[self.vanilla_item_type_name]
+		self.extra = {}
 	end,
 
 

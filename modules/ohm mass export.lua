@@ -57,7 +57,7 @@ function G.FUNCS.mass_export(e)
 		local undefined_ct_list = {"Text colour, background colour"}
 		for _,row in pairs(MuExporter.undefined_ct_codes) do table.insert(undefined_ct_list, row) end
 		love.filesystem.createDirectory(MuExporter.filedirs.bmw)
-		local ct_filename = MuExporter.filedirs.bmw .. "Undefined Ct codes.csv"
+		local ct_filename = MuExporter.filedirs.bmw .. "Undefined Ct codes.txt"
 		local ct_filecontent = table.concat(undefined_ct_list, "\n")
 		love.filesystem.write(ct_filename, ct_filecontent)
 	end)

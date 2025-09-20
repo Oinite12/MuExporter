@@ -20,6 +20,7 @@
 ---@field generate_registry_section? fun(self: Mu.CenterExporter, mod_name: string, item_order: string[]): boolean Generates a section containing registers for items of a given item type.
 ---@field generate_list_section? fun(self: Mu.CenterExporter, mod_name: string, item_order: string[]): boolean Generates a section containing a table of items.
 ---@field mass_export? fun(self: Mu.CenterExporter, mod_id: string): nil Exports all of the items of a given item type from a mod.
+---@field extra? table A table to hold additonal data for the CenterExporter.
 ---@overload fun(self: Mu.CenterExporter): Mu.CenterExporter
 MuExporter.obj.CenterExporter = setmetatable({}, {
     __call = function(self)

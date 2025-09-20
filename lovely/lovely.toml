@@ -53,3 +53,16 @@ pattern = "if self.ARGS.invisible_area_types[self.config.type] or"
 position = "after"
 payload = "(G.STAGE == G.STAGES.muexp_EXPORTZONE) or"
 match_indent = true
+
+# Prevents a center's set_ability in the Export Zone
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "obj:set_ability(self, initial, delay_sprites)"
+position = "at"
+payload = '''
+if G.STAGE ~= G.STAGES.muexp_EXPORTZONE then
+  obj:set_ability(self, initial, delay_sprites)
+end
+'''
+match_indent = true
