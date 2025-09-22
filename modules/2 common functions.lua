@@ -268,8 +268,6 @@ function Mu_f.transcribe_desc_line(line)
 	local transcribed_line = table.concat(line_concat)
 	-- Trim around the line, and shorten multi-spaces to single spaces
 	transcribed_line = trim(transcribed_line):gsub(" +", " ")
-	-- Then fruther merge size tags
-	transcribed_line = transcribed_line:gsub("</small>( *)<small>", "%1"):gsub("</big>( *)<big>", "%1")
 	return transcribed_line
 end
 
