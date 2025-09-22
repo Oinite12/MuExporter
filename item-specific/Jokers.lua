@@ -98,7 +98,7 @@ MuExporter.obj.CenterExporter {
 		for _, item_key in ipairs(item_order) do
 			local item_info = self:prepare_values(item_key)
 			local item_name = item_info.nakedname
-			local buyprice  = item_info
+			local buyprice  = item_info.buyprice
 			local rarity    = item_info.rarity
 
 			local effect_concat_table = {}

@@ -192,7 +192,7 @@ function Mu_f.transcribe_desc_line(line)
 		section_info.ct_code = determine_code(section_info.c, section_info.x, section_info.v)
 
 		-- Determine size tags
-		if section_info.s then
+		if section_info.s and trim(text) ~= "" then
 			section_info.s = tonumber(section_info.s)
 			if section_info.s > 1 then
 				start_tag = start_tag:format("big")
@@ -226,9 +226,19 @@ function Mu_f.transcribe_desc_line(line)
 	local line_concat = {}
 
 	for i=1, (#line_prepare) do
-		local segment = line_prepare[i]   -- 1
+		local segment = line_prepare[i]     -- 1
 		local next_seg = line_prepare[i+1]  -- 2
 		local cross_seg = line_prepare[i+2] -- 3
+		local tail_seg = line_prepare[i+3]  -- 4
+
+		local tail_condition = true
+		-- To prevent the following case from breaking syntax:
+		-- {C:1}TextA {C:2}TextB {C:1}TextC {C:2} TextD
+		-- which would otherwise turn into {{ct|1|TextA}} {{ct|2|TextB TextC}} TextD}} <-- loose end
+		-- weird stuff, ik
+		if tail_seg then
+			tail_condition = tail_seg.ct_code ~= next_seg.ct_code
+		end
 
 		-- Merging Ct groups
 		-- Segments must NOT be scaled otherwise this will happen and break things:
@@ -237,24 +247,30 @@ function Mu_f.transcribe_desc_line(line)
 			segment.ct_code and not segment.s
 			and next_seg and next_seg.ct_code -- Check required as there is no nil ct_code
 			and cross_seg and cross_seg.ct_code and not cross_seg.s
-			and cross_seg.ct_code == segment.ct_code
+			and segment.ct_code == cross_seg.ct_code
+			and tail_condition
 		) then
-			line_prepare[i].final_text = segment.final_text:gsub("}}$", "")
-			line_prepare[i+2].final_text = cross_seg.final_text:gsub(("^{{ct|%s|"):format(cross_seg.ct_code), "")
+			segment.final_text = segment.final_text:gsub("}}$", "")
+			cross_seg.final_text = cross_seg.final_text:gsub(("^{{ct|%s|"):format(cross_seg.ct_code), "")
 		end
 
 		-- Merging size groups
 		if (
 			segment.s and next_seg and next_seg.s and segment.s == next_seg.s
 		) then
-			line_prepare[i].final_text = segment.final_text:gsub("</big>$",""):gsub("</small>$","")
-			line_prepare[i+1].final_text = next_seg.final_text:gsub("<^[^/]big>",""):gsub("<^[^/]small>","")
+			segment.final_text = segment.final_text:gsub("</big>$",""):gsub("</small>$","")
+			next_seg.final_text = next_seg.final_text:gsub("^<big>",""):gsub("^<small>","")
 		end
 
 		table.insert(line_concat, line_prepare[i].final_text)
 	end
 
-	return table.concat(line_concat)
+	local transcribed_line = table.concat(line_concat)
+	-- Trim around the line, and shorten multi-spaces to single spaces
+	transcribed_line = trim(transcribed_line):gsub(" +", " ")
+	-- Then fruther merge size tags
+	transcribed_line = transcribed_line:gsub("</small>( *)<small>", "%1"):gsub("</big>( *)<big>", "%1")
+	return transcribed_line
 end
 
 -- Transcribes a Balatro description table into wikitext.
