@@ -2,7 +2,7 @@
 -- This code sucks ass
 -- Because of event bullshit I have to put all these functions on a higher scope than the register
 -- I really do not appreciate how this is writtem but it works and it upsets me, but better than nothing
--- Praying rn someone will come in and make this 1000000000% better
+-- Praying someone will come in and make this 1000000000% better
 
 local section_format =
 [[== %s ==
@@ -212,15 +212,6 @@ MuExporter.obj.CenterExporter {
 	key = 'Consumables',
 	vanilla_item_type_name = 'Consumeables', --sic
 	prepare_values = function (self, item_key) return {} end,
-
-	-- largely here as an example
-	extra = {
-		consumable_type_name = "string",
-		consumable_list = "table",
-		vanilla_consumable_type_name = "string",
-		ordered_consumable_list = "table",
-		consumable_loc_desc = "table"
-	},
 
 	mass_export = function (self, mod_id)
 		local mod_object = SMODS.Mods[mod_id]
