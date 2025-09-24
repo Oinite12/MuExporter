@@ -9,6 +9,7 @@ This mod was inspired by pre-existing data extractors such as [CardExporter](//g
 - Decks
 - Vouchers
 - Enhancements
+- Editions
 
 ## Planned features
 Subject to change!
@@ -17,7 +18,7 @@ Subject to change!
 - [X] Individual sprite exporting 
 - [X] Indivudual sprite exporting with layers
 - [ ] Individual animated sprite exporting
-- [ ] Individual shaded sprite exporting
+- [X] Individual shaded sprite exporting
 - [X] Individual description exporting
 ### Formatting
 - [X] Balatro localization to wikitext transcriber
