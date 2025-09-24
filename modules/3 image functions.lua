@@ -34,23 +34,30 @@ function MuExporter.ImageDataHolder:overlay_layer(atlas_name, pos_x, pos_y, atla
 	local full_px = atlas.px*granularity
 	local full_py = atlas.py*granularity
 
-	local function over(x, y, r, g, b, a)
+	local function over(under_x, under_y, under_r, under_g, under_b, under_a)
 		-- "a over b"
 		-- based on formulae in https://en.wikipedia.org/wiki/Alpha_compositing#Description
 
 		-- over channels
-		local over_r,over_g,over_b,over_a = atlas.image_data:getPixel(pos_x*full_px + x, pos_y*full_py + y)
+		local over_r, over_g, over_b, over_a = atlas.image_data:getPixel(pos_x*full_px + under_x, pos_y*full_py + under_y)
+
 		if over_a == 0 then
-			return r, g, b, a
+			-- Over channel is fully transparent; return under
+			return under_r, under_g, under_b, under_a
 		elseif over_a == 1 then
+			-- Over channel is fully opaque; return over
 			return over_r, over_g, over_b, over_a
 		end
 
 		-- return channels
-		local return_a = over_a + a*(1 - over_a)
-		local return_r = (over_r*over_a + r*a*(1 - over_a))/return_a
-		local return_g = (over_g*over_a + g*a*(1 - over_a))/return_a
-		local return_b = (over_b*over_a + b*a*(1 - over_a))/return_a
+		local return_a = over_a + under_a*(1 - over_a)
+		local function compose_color(over_col, under_col)
+			return (over_col*over_a + under_col*under_a*(1 - over_a))/return_a
+		end
+
+		local return_r = compose_color(over_r, under_r)
+		local return_g = compose_color(over_g, under_g)
+		local return_b = compose_color(over_b, under_b)
 
 		return return_r, return_g, return_b, return_a
 	end
@@ -76,7 +83,6 @@ end
 ---@return Mu.ImageDataHolder
 function Mu_f.get_image_data_holder(w, h)
 	-- We do it this way so we're not unnecessarily creating image data objects
-
 	local image_data_holder = MuExporter.image_data_holders[w .. "*" .. h]
 	if image_data_holder == nil then
 		image_data_holder = MuExporter.ImageDataHolder(w, h)
@@ -86,7 +92,7 @@ end
 
 -- ============
 
--- Extracts a single sprite from an atlas places it\
+-- Extracts a single sprite from an atlas and places it\
 -- on an image data holder.
 ---@param atlas_name string
 ---@param x integer

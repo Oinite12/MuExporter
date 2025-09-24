@@ -39,6 +39,10 @@ function Mu_f.set_dir_slash(dir_path)
 end
 
 -- ============
+
+-- Sets the center in the CenterContainer for additional value accessing.
+---@param key string
+---@return Card
 function Mu_f.set_contained_center(key)
 	-- Card needs to be created to access locvars
 	local area = G.export_zone.CenterContainer

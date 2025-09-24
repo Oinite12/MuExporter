@@ -1,5 +1,5 @@
 local section_format =
-[[== List of Jokers ==
+[[== Enhancements ==
 {{auto generated|MuExporter}}
 {| class="wikitable sortable"
 ! Enhancement !! Name !! Effect
