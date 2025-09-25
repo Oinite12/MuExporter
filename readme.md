@@ -1,6 +1,6 @@
 ***<u>DISCLAIMER! THIS IS A HIGHLY WORK-IN-PROGRESS PROJECT AND IS PRETTY MUCH USELESS IN ITS CURRENT STATE.</u>***
 # MuExporter
-MuExporter is a Balatro mod that exports data from modded content and prepares it to be useable on the [Modded Balatro Wiki](//balatromods.miraheze.org), streamlining the process of adding initial data to the wiki before in-depth documentation begins. It is intended to be easily expanded to atypical item types and cater to each item type's unique quirks that prevent an all-encompassing solution from being developed.
+MuExporter is a Balatro mod that exports data from modded content and prepares it to be useable on the [Modded Balatro Wiki](//balatromods.miraheze.org), streamlining the process of adding initial data to the wiki before in-depth documentation begins. MuExporter is designed with modularity in mind so that the mod can be easily expanded to support atypical item types, catering to the unique quirks of each item type that would prevent an all-encompassing solution from being developed.
 
 This mod was inspired by pre-existing data extractors such as [CardExporter](//github.com/lshtech/CardExporter) (particularly [Mysthaps's fork](//github.com/Mysthaps/CardExporter)) and [BalatroDumper](//github.com/BakersDozenBagels/BalatroDumper).
 
