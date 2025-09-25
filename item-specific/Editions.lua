@@ -43,7 +43,7 @@ MuExporter.obj.CenterExporter {
 		local item_name = Mu_f.filename_strip(self:prepare_values(item_key).nakedname)
 
 		local granularity = G.SETTINGS.GRAPHICS.texture_scaling
-		local dummy_card = Mu_f.set_contained_center('j_joker') --[[@as Card]]
+		local dummy_card = Mu_f.set_contained_center('j_joker')
 		dummy_card:set_edition(item_key, true, true)
 		local dummy_sprite = dummy_card.children.center
 		local dummy_sprite_w = dummy_sprite.scale.x*granularity
@@ -67,6 +67,7 @@ MuExporter.obj.CenterExporter {
 
 		-- Massive credits to CardExporter for the procedure on how to export shader results
 		local canvas = love.graphics.newCanvas(dummy_sprite_w, dummy_sprite_h, {type = '2d', readable = true})
+		-- Creating a new canvas instance per edition is fine since editions aren't all too common
 		local previous_canvas = love.graphics.getCanvas()
 		love.graphics.push()
 		love.graphics.setCanvas(canvas)
@@ -89,7 +90,8 @@ MuExporter.obj.CenterExporter {
 		love.filesystem.createDirectory(dir)
 		dir = Mu_f.set_dir_slash(dir)
 		canvas:newImageData():encode("png", (dir .. file_name))
-		canvas:release() -- Remove instance of canvas for performance
+		canvas:release() -- Remove instance of canvas to prevent build-up
+		dummy_card:set_edition(nil, true, true)
 
 		return true
 	end,

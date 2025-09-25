@@ -8,6 +8,7 @@ end
 local easter_egg_1 = false
 local easter_egg_2 = false
 local easter_egg_3 = false
+local easter_egg_4 = false
 
 function G.FUNCS.mass_export(e)
 	local selected_mods = {}
@@ -44,7 +45,7 @@ function G.FUNCS.mass_export(e)
 		easter_egg_3 = true
 		return
 	end
-	MuExporter.enable_easter_egg = easter_egg_1 and easter_egg_2 and easter_egg_3
+	MuExporter.enable_easter_egg = easter_egg_1 and easter_egg_2 and easter_egg_3 and easter_egg_4
 
 	log("STARTING EXPORT - Expect freezing!!")
 	for _,mod_id in ipairs(selected_mods) do
@@ -69,5 +70,6 @@ function G.FUNCS.mass_export(e)
 			log("Undefined CT codes detected: Please send the 'Undefined Ct codes.txt' file to")
 			log("    the BMW Discord server or the MuExporter repository.")
 		end
+		easter_egg_4 = true
 	end)
 end
