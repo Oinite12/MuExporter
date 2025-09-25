@@ -5,18 +5,21 @@ MuExporter is a Balatro mod that exports data from modded content and prepares i
 This mod was inspired by pre-existing data extractors such as [CardExporter](//github.com/lshtech/CardExporter) (particularly [Mysthaps's fork](//github.com/Mysthaps/CardExporter)) and [BalatroDumper](//github.com/BakersDozenBagels/BalatroDumper).
 
 ## Supported item types
-- [X] Jokers
-- [X] Decks
-- [X] Vouchers
-- [ ] Consumables
-- [X] Enhancements
+- [X] Centers
+  - [X] Jokers
+  - [X] Decks
+  - [X] Vouchers
+  - [X] Consumables
+  - [X] Enhancements
+  - [X] Editions
+  - [ ] Booster Packs
 - [ ] Seals
-- [X] Editions
 - [ ] Stickers
-- [ ] Booster Packs
 - [ ] Tags
 - [ ] Blinds
 - [ ] Stakes
+- Modded types
+  - ...?
 
 ## Planned features
 Subject to change!
