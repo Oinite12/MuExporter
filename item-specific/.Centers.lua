@@ -33,6 +33,7 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		local locked_loc_vars = center.locked_loc_vars and center:locked_loc_vars({}, item) or {vars = {}}
 		local localization = self.loc_desc[item_key]
 		local name = localization.name
+		if type(name) == "table" then name = table.concat(name, " ") end
 
 		loc_vars.vars = loc_vars.vars or {}
 		locked_loc_vars.vars = locked_loc_vars.vars or {}
@@ -85,7 +86,7 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		local page = page_format:format(self.item_type_name, infobox_text)
 		----
 		local dir = MuExporter.filedirs.mod_pages(item_data.mod, self.item_type_name)
-		local file_name = item_data.nakedname .. ".txt"
+		local file_name = Mu_f.filename_strip(item_data.nakedname) .. ".txt"
 
 		love.filesystem.createDirectory(dir)
 		dir = Mu_f.set_dir_slash(dir)
@@ -114,7 +115,6 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		if not SMODS.Atlases[item.atlas] then return false end
 
 		local mod_name = item.mod.name
-		local item_name = self:prepare_values(item_key).nakedname
 
 		local pos = item.pos
 		local soul_pos = item.soul_pos
@@ -126,7 +126,7 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		end
 
 		local dir = MuExporter.filedirs.mod_imgs(mod_name, self.item_type_name)
-		local file_name = ("%s (%s).png"):format(item_name, mod_name)
+		local file_name = self:prepare_values(item_key).image
 		item_sprite:export_sprite(dir, file_name)
 
 		return true

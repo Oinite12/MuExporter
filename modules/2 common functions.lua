@@ -5,7 +5,7 @@ local illegal_file_name_characters = {
 	["?"]=true, ["*"]=true
 }
 
--- Replaces the characters #<>[]|:{}/\\ \
+-- Replaces the characters `#<>[]|:{}/\"?*` \
 -- (illegal file name characters) with -.
 ---@param input string
 ---@return string
@@ -87,7 +87,7 @@ function Mu_f.split(input, sep, doTrim)
 	-- this function taken from https://stackoverflow.com/a/7615129
 	if sep == nil then sep = "%s" end
 	local t = {}
-	for str in input:gmatch("([^"..sep.."]+)") do
+	for str in tostring(input):gmatch("([^"..sep.."]+)") do
 		table.insert(t, doTrim and trim(str) or str)
 	end
 	return t
