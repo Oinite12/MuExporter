@@ -175,23 +175,35 @@ end
 function Mu_f.transcribe_desc_line(line)
 	local line_prepare = {}
 	local split_line = split(line, "{")
+	-- "{C:mult}Test {X:mult,C:white}123 {Mu3}Bla"
+	----> "C:mult}Test", "X:mult,C:white}123", "Mu3}Bla"
 
-	for _,section in ipairs(split_line) do
+	for section_index, section in ipairs(split_line) do
 		local section_split = split(section, "}")
+		-- ""X:mult,C:white}123""
+		----> "X:mult,C:white", "123"
+
 		local control = #section_split == 2 and section_split[1] or ""
 		control = trim(control)
 		local text = section_split[#section_split] or ""
 
-		local section_info = {text = text}
+		if trim(text) == "" then
+			if text:len() >= 1 and text:sub(1, 1) == " " and section_index > 1 then
+				line_prepare[#line_prepare].has_endspace = true
+			end
+			goto continue_skip_transcription
+		end
 
-		local start_tag = "<%s>"
-		local end_tag = "</%s>"
-		local ct_format = "{{ct|%s|%s}}"
+		local section_info = {text = text}
 
 		-- Parse control syntax
 		local control_split = split(control, ",")
+		-- "X:mult,C:white"
+		----> "X:mult", "C:white"
 		for _,control_segment in ipairs(control_split) do
 			local seg_split = split(control_segment, ":", true)
+			-- "X:mult"
+			----> "X", "mult"
 			local control_key = seg_split[1]
 			local control_value = seg_split[2]
 			section_info[control_key:lower()] = control_value
@@ -204,32 +216,34 @@ function Mu_f.transcribe_desc_line(line)
 		if section_info.s and trim(text) ~= "" then
 			section_info.s = tonumber(section_info.s)
 			if section_info.s > 1 then
-				start_tag = start_tag:format("big")
-				end_tag = end_tag:format("big")
+				section_info.size = "big"
 			elseif section_info.s < 1 then
-				start_tag = start_tag:format("small")
-				end_tag = end_tag:format("small")
+				section_info.size = "small"
 			else
+				section_info.size = nil
 				section_info.s = nil
-				start_tag = ""
-				end_tag = ""
 			end
-		else
-			start_tag = ""
-			end_tag = ""
 		end
 
-		local preserve_startspace = text:sub(1, 1) == " " and " " or ""
-		local preserve_endspace   = text:sub(text:len(), text:len()) == " " and " " or ""
+		section_info.has_startspace = text:sub(1, 1) == " "
+		section_info.has_endspace   = text:sub(text:len(), text:len()) == " "
 
-		section_info.final_text = table.concat({
-			preserve_startspace,
-			start_tag,
-			section_info.ct_code and ct_format:format(section_info.ct_code, trim(text)) or trim(text),
-			end_tag,
-			preserve_endspace
-		})
 		table.insert(line_prepare, section_info)
+		::continue_skip_transcription::
+	end
+
+	for _,section in ipairs(line_prepare) do
+		local text = trim(section.text)
+		local size = section.size
+		local ct_code = section.ct_code
+
+		local start_space = section.has_startspace and " " or ""
+		local start_tag   = size and ("<%s>"):format(size) or ""
+		local final_text  = ct_code and ("{{ct|%s|%s}}"):format(ct_code, text) or text
+		local end_tag     = size and ("</%s>"):format(size) or ""
+		local end_space   = section.has_endspace and " " or ""
+
+		section.final_text = table.concat({ start_space, start_tag, final_text, end_tag, end_space })
 	end
 
 	local line_concat = {}
@@ -259,16 +273,16 @@ function Mu_f.transcribe_desc_line(line)
 			and segment.ct_code == cross_seg.ct_code
 			and tail_condition
 		) then
-			segment.final_text = segment.final_text:gsub("}}$", "")
-			cross_seg.final_text = cross_seg.final_text:gsub(("^{{ct|%s|"):format(cross_seg.ct_code), "")
+			segment.final_text = segment.final_text:gsub("}}", "")
+			cross_seg.final_text = cross_seg.final_text:gsub(("{{ct|%s|"):format(cross_seg.ct_code), "")
 		end
 
 		-- Merging size groups
 		if (
 			segment.s and next_seg and next_seg.s and segment.s == next_seg.s
 		) then
-			segment.final_text = segment.final_text:gsub("</big>$",""):gsub("</small>$","")
-			next_seg.final_text = next_seg.final_text:gsub("^<big>",""):gsub("^<small>","")
+			segment.final_text = segment.final_text:gsub("</big>",""):gsub("</small>","")
+			next_seg.final_text = next_seg.final_text:gsub("<big>",""):gsub("<small>","")
 		end
 
 		table.insert(line_concat, line_prepare[i].final_text)
