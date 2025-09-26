@@ -33,6 +33,6 @@ Mu_f.simple_ev = function(func)
 	})
 end
 
-load_directory("lib")
+load_directory("init")
 load_directory("modules")
 load_directory("item-specific")
