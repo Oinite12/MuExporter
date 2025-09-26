@@ -40,7 +40,7 @@ local c_generate_ordered_mod_item_list = function (poopshit, mod_object)
 end
 
 local c_get_localization_text = function(poopshit, item_key)
-	local item = Mu_f.set_contained_center(item_key)
+	local item = Mu_f.set_contained_center(item_key) --[[@as table|Card]]
 	local center = item.config.center
 
 	local loc_vars = center.loc_vars and center:loc_vars({}, item) or {vars = {}}

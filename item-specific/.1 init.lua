@@ -1,15 +1,18 @@
--- This does not export all centers, it's a class to allow registration of the action of exporting centers
--- Tried expanding MuExporter.obj.Exporter but inject function doesn't work in that case for some reason
+MuExporter.exporters = {} -- Registered exporters
+MuExporter.items = {} -- prepare_values tables
+MuExporter.obj = {} -- Objects that are used to register exporters
 
-MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
-	set = 'CenterExporters',
+MuExporter.obj.Exporter = SMODS.GameObject:extend {
+	set = 'Exporters',
 	obj_table = MuExporter.exporters,
 	obj_buffer = {},
 	prefix_config = { key = false },
 
 	required_params = {
 		'key',
-		'prepare_values'
+		'prepare_values',
+		'get_localization_text',
+		'generate_ordered_mod_item_list'
 	},
 
 	inject = function(self)
@@ -18,52 +21,11 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		self.item_list = self.item_list or MuExporter.items[self.key]
 
 		self.vanilla_item_type_name = self.vanilla_item_type_name or self.key
-		self.ordered_item_list = G.P_CENTER_POOLS[self.vanilla_item_type_name]
 		self.loc_desc = self.loc_desc or G.localization.descriptions[self.vanilla_item_type_name]
 		self.extra = {}
 	end,
 
 
-
-	get_localization_text = function(self, item_key)
-		local item = Mu_f.set_contained_center(item_key) --[[@as table|Card]]
-		local center = item.config.center
-
-		local loc_vars = center.loc_vars and center:loc_vars({}, item) or {vars = {}}
-		local locked_loc_vars = center.locked_loc_vars and center:locked_loc_vars({}, item) or {vars = {}}
-		local localization = self.loc_desc[item_key]
-		local name = localization.name
-
-		loc_vars.vars = loc_vars.vars or {}
-		locked_loc_vars.vars = locked_loc_vars.vars or {}
-
-		local unparsed_effect = localization.text and (
-			type(localization.text[1]) == "table"
-			and localization.text
-			or {localization.text}
-		) or {}
-		local unparsed_unlock = localization.unlock and (
-			type(localization.unlock[1]) == "table"
-			and localization.unlock
-			or {localization.unlock}
-		) or {}
-
-		Mu_f.set_loc_vars(loc_vars.vars, unparsed_effect)
-		Mu_f.set_loc_vars(locked_loc_vars.vars, unparsed_unlock)
-
-		return {
-			center = center,
-			name = name,
-			unparsed_effect = unparsed_effect,
-			unparsed_unlock = unparsed_unlock
-		}
-	end,
-
-	wikitext_unlock = function(params_table, parsed_unlock)
-		if #parsed_unlock > 0 then
-			params_table.unlock = table.concat(parsed_unlock[1], "<br>")
-		end
-	end,
 
 	wikitext_effect = function(params_table, parsed_effect)
 		if #parsed_effect == 1 then
@@ -108,30 +70,6 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		return order
 	end,
 
-	export_sprite = function(self, item_key)
-		local item = G.P_CENTERS[item_key]
-		if not (item and item.mod) then return false end
-		if not SMODS.Atlases[item.atlas] then return false end
-
-		local mod_name = item.mod.name
-		local item_name = self:prepare_values(item_key).nakedname
-
-		local pos = item.pos
-		local soul_pos = item.soul_pos
-		local atlas = item.atlas
-
-		local item_sprite = Mu_f.get_atlas_sprite(atlas, pos.x, pos.y)
-		if soul_pos and soul_pos.x and soul_pos.y then
-			item_sprite:overlay_layer(atlas, soul_pos.x, soul_pos.y)
-		end
-
-		local dir = MuExporter.filedirs.mod_imgs(mod_name, self.item_type_name)
-		local file_name = ("%s (%s).png"):format(item_name, mod_name)
-		item_sprite:export_sprite(dir, file_name)
-
-		return true
-	end,
-
 	mass_export = function(self, mod_id)
 		local mod_object = SMODS.Mods[mod_id]
 		local mod_name = mod_object.name or "unspecified_mod"
@@ -140,9 +78,11 @@ MuExporter.obj.CenterExporter = SMODS.GameObject:extend {
 		local ordered_mod_item_list = self:generate_ordered_mod_item_list(mod_object)
 
 		for _,item_key in ipairs(ordered_mod_item_list) do
-			Mu_f.simple_ev(function()
-				self:export_sprite(item_key)
-			end)
+			if self.export_sprite then
+				Mu_f.simple_ev(function()
+					self:export_sprite(item_key)
+				end)
+			end
 			if self.infobox_template then
 				Mu_f.simple_ev(function()
 					self:generate_individual_page(item_key)

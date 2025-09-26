@@ -43,7 +43,7 @@ MuExporter.obj.CenterExporter {
 		local item_name = Mu_f.filename_strip(self:prepare_values(item_key).nakedname)
 
 		local granularity = G.SETTINGS.GRAPHICS.texture_scaling
-		local dummy_card = Mu_f.set_contained_center('j_joker')
+		local dummy_card = Mu_f.set_contained_center('j_joker') --[[@as table|Card]]
 		dummy_card:set_edition(item_key, true, true)
 		local dummy_sprite = dummy_card.children.center
 		local dummy_sprite_w = dummy_sprite.scale.x*granularity

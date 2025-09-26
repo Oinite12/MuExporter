@@ -42,9 +42,14 @@ end
 
 -- Sets the center in the CenterContainer for additional value accessing.
 ---@param key string
----@return Card
+---@return table|Card|nil
 function Mu_f.set_contained_center(key)
-	-- Card needs to be created to access locvars
+	if not (G.export_zone and G.export_zone.CenterContainer) then
+		error('Function cannot be used outside of export zone')
+		return
+	end
+
+	-- Card needs to be created to access loc_vars
 	local area = G.export_zone.CenterContainer
 
 	-- If card already set, just change ability

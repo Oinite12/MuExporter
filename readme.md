@@ -13,9 +13,9 @@ This mod was inspired by pre-existing data extractors such as [CardExporter](//g
   - [X] Enhancements
   - [X] Editions
   - [ ] Booster Packs
-- [ ] Seals
+- [X] Seals
 - [ ] Stickers
-- [ ] Tags
+- [X] Tags
 - [ ] Blinds
 - [ ] Stakes
 - Modded types
